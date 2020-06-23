@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package api;
+
+service KotfApi {
+  rpc Init(TerraformInitRequest) returns (Result){}
+  rpc Apply(TerraformApplyRequest) returns (Result){}
+}
+
+message Result {
+  bool success = 1;
+  string msg  = 2;
+}
+
+message TerraformInitRequest {
+  string clusterName = 1;
+  string type = 2;
+  map<string, string>vars = 3;
+}
+
+message TerraformApplyRequest {
+  string clusterName = 1;
+  string type = 2;
+}
