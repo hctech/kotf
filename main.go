@@ -1,5 +1,0 @@
-package kotf
-
-func main() {
-
-}
