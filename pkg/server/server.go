@@ -1,7 +1,9 @@
 package server
 
 import (
+	"encoding/json"
 	"github.com/kotf/api"
+	"github.com/kotf/pkg/terraform"
 	"golang.org/x/net/context"
 )
 
@@ -13,13 +15,35 @@ func NewKotf() *kotf {
 }
 
 func (k kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.Result, error) {
-	t := NewTerraform()
-	err := t.init(req.ClusterName, req.Type, req.Vars)
+	t := terraform.NewTerraform()
+
+	resp := &api.Result{
+		Success: false,
+	}
+
+	var provider map[string]interface{}
+	if err := json.Unmarshal([]byte(req.Provider), &provider); err == nil {
+		return resp, nil
+	}
+	var cloudRegion map[string]interface{}
+	if err := json.Unmarshal([]byte(req.CloudRegion), &cloudRegion); err == nil {
+		return resp, nil
+	}
+	var hosts map[string]interface{}
+	if err := json.Unmarshal([]byte(req.Hosts), &hosts); err == nil {
+		return resp, nil
+	}
+	vars := map[string]interface{}{
+		"provider":    provider,
+		"cloudRegion": cloudRegion,
+		"hosts":       hosts,
+	}
+
+	output, err := t.Init(req.ClusterName, req.Type, vars)
 	if err != nil {
 		return nil, err
 	}
-	resp := &api.Result{
-		Success: true,
-	}
+	resp.Output = output
+	resp.Success = true
 	return resp, nil
 }

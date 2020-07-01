@@ -15,14 +15,14 @@ type Provider struct {
 }
 
 func main() {
-	t1, err := template.ParseFiles("/Users/zk.wang/go/src/github.com/kotf/resource/test.tf")
+	t1, err := template.ParseFiles("/Users/zk.wang/go/src/github.com/kotf/resource/vsphere/terraform.tf")
 	if err != nil {
 		panic(err)
 	}
 	//p := Provider{Username: "test", Password: "test", Host: "172.0.0.1"}
 	//t1.Execute(os.Stdout, p)
 
-	pers := `{"Username":"test","Password":"123123","Host":"123123"}`
+	pers := `{ "provider": {"userName":"test"}, "cloudRegions": {"name" :"test-dc"} }`
 	var dat map[string]interface{}
 	if err := json.Unmarshal([]byte(pers), &dat); err == nil {
 	}

@@ -2,7 +2,6 @@ package util
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
 	"io"
 	"os"
 	"path"
@@ -60,6 +59,4 @@ func MoveFileToPath(sourcePath string, filename string, targetPath string) error
 			return nil
 		}
 	}
-	v := viper.New()
-
 }

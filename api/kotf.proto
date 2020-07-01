@@ -9,16 +9,20 @@ service KotfApi {
 
 message Result {
   bool success = 1;
-  string msg  = 2;
+  string msg = 2;
+  string output = 3;
 }
 
 message TerraformInitRequest {
   string clusterName = 1;
   string type = 2;
-  map<string, string>vars = 3;
+  string cloudRegion = 3;
+  string hosts = 4;
+  string provider = 5;
 }
 
 message TerraformApplyRequest {
   string clusterName = 1;
   string type = 2;
 }
+
