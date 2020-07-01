@@ -42,7 +42,12 @@ func (c *KotfClient) Init(clusterName string, cloudType string, provider string,
 		CloudRegion: cloudRegion,
 		Hosts:       hosts,
 	}
+	//req := api.TerraformApplyRequest{
+	//	ClusterName: clusterName,
+	//	Type:        cloudType,
+	//}
 	result, err := client.Init(context.Background(), &req)
+	//result, err := client.Apply(context.Background(), &req)
 	if err != nil {
 		return nil, err
 	}

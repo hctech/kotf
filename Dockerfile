@@ -28,7 +28,7 @@ FROM golang:1.14-alpine
 
 COPY --from=stage-build /build/kotf/dist/etc/ /etc/
 COPY --from=stage-build /build/kotf/dist/usr/ /usr/
-COPY --from=stage-build /build/kotf/dist/var/ /var/
+#COPY --from=stage-build /build/kotf/dist/var/ /var/
 
 VOLUME ["/var/koft/data"]
 
