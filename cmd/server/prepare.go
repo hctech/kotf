@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/kotf/pkg/constant"
+	"github.com/KubeOperator/kotf/pkg/constant"
 	"os"
 )
 

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/kotf/pkg/config"
+	"github.com/KubeOperator/kotf/pkg/config"
 	"github.com/spf13/viper"
 	"log"
 )
