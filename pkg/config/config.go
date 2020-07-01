@@ -4,7 +4,7 @@ import "github.com/spf13/viper"
 
 const (
 	defaultServerHost = "127.0.0.1"
-	defaultServerPort = 8082
+	defaultServerPort = 8080
 	defaultBaseDir    = "/var/kotf"
 )
 
