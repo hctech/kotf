@@ -2,8 +2,8 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/kotf/api"
-	"github.com/kotf/pkg/terraform"
+	"github.com/KubeOperator/kotf/api"
+	"github.com/KubeOperator/kotf/pkg/terraform"
 	"golang.org/x/net/context"
 )
 

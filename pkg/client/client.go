@@ -2,7 +2,7 @@ package client
 
 import (
 	"fmt"
-	"github.com/kotf/api"
+	"github.com/KubeOperator/kotf/api"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )

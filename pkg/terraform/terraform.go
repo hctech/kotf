@@ -2,8 +2,8 @@ package terraform
 
 import (
 	"errors"
-	"github.com/kotf/pkg/constant"
-	"github.com/kotf/util"
+	"github.com/KubeOperator/kotf/pkg/constant"
+	"github.com/KubeOperator/kotf/util"
 	"io/ioutil"
 	"os/exec"
 	"path"
