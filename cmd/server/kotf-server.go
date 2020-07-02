@@ -3,17 +3,17 @@ package main
 import (
 	"fmt"
 	"github.com/KubeOperator/kotf/pkg/config"
+	"github.com/spf13/viper"
 	"log"
 )
 
 func main() {
 	config.Init()
-	//constant.Init()
 	if err := prepareStart(); err != nil {
 		log.Fatal(err)
 	}
-	host := "0.0.0.0"
-	port := 8080
+	host := viper.GetString("server.host")
+	port := viper.GetInt("server.port")
 	address := fmt.Sprintf("%s:%d", host, port)
 	lis, err := newTcpListener(address)
 	if err != nil {

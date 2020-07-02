@@ -1,9 +1,9 @@
 {{ $provider := .provider }}
-{{ $region := .cloudRegions }}
+{{ $region := .cloudRegion }}
 {{ $hosts := .hosts }}
 
 provider "vsphere" {
-  user = "{{ $provider.userName }}"
+  user = "{{ $provider.username }}"
   password = "{{ $provider.password }}"
   vsphere_server = "{{ $provider.host }}"
 
@@ -12,54 +12,55 @@ provider "vsphere" {
 }
 
 data "vsphere_datacenter" "dc" {
-  name = "{{ $region.name }}"
+  name = "{{ $region.datacenter }}"
 }
 
-{{ range $region.Zones}}
+{{ range $region.zones}}
 data "vsphere_resource_pool" "{{ .key }}" {
   {{ if  eq .name "Resources" }}
    name  = "{{ .cluster }}/Resources"
   {{ else if ne .name "Resources" }}
    name  = "{{ .cluster }}/Resources/{{ .name }}"
   {{ end }}
-   datacenter_id = "${data.vsphere_datacenter.dc.id}"
+   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_network" "{{ .key }}" {
-  name = "{{ .vcNetwork }}"
-  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+  name = "{{ .network }}"
+  datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_datastore" "{{ .key }}" {
   name = "{{ .datastore }}"
-  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_virtual_machine" "{{ .key }}" {
+  name = "{{ .imageName }}"
+  datacenter_id = data.vsphere_datacenter.dc.id
 }
 {{ end }}
 
-data "vsphere_virtual_machine" "template" {
-  name = "kubeoperator/{{ .imageName }}"
-  datacenter_id = "${data.vsphere_datacenter.dc.id}"
-}
 
 {{ range $hosts}}
 resource "vsphere_virtual_machine" "{{.shortName}}" {
   name = "{{ .name }}"
   folder = "kubeoperator"
-  resource_pool_id = "${data.vsphere_resource_pool.{{ .zone.key }}.id}"
-  datastore_id = "${data.vsphere_datastore.datastore.id}"
+  resource_pool_id = data.vsphere_resource_pool.{{ .zone.key }}.id
+  datastore_id = data.vsphere_datastore.{{ .zone.key }}.id
   num_cpus = {{ .cpu }}
   memory = {{ .memory }}
-  guest_id = "{{ .guestId }}"
+  guest_id = "{{ .zone.guestId }}"
 
   network_interface {
-    network_id = "${data.vsphere_network.{{ .zone.key }}.id}"
+    network_id = data.vsphere_network.{{ .zone.key }}.id
   }
 
   disk {
     label            = "disk0"
-    size             = "${data.vsphere_virtual_machine.template.disks.0.size}"
-    eagerly_scrub    = "${data.vsphere_virtual_machine.template.disks.0.eagerly_scrub}"
-    thin_provisioned = "${data.vsphere_virtual_machine.template.disks.0.thin_provisioned}"
+    size             = data.vsphere_virtual_machine.{{ .zone.key }}.disks.0.size
+    eagerly_scrub    = data.vsphere_virtual_machine.{{ .zone.key }}.disks.0.eagerly_scrub
+    thin_provisioned = data.vsphere_virtual_machine.{{ .zone.key }}.disks.0.thin_provisioned
   }
 
   lifecycle {
@@ -69,7 +70,7 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
   }
 
   clone {
-    template_uuid = "${data.vsphere_virtual_machine.template.id}"
+    template_uuid = data.vsphere_virtual_machine.{{ .zone.key }}.id
     timeout = 60
     customize {
 
@@ -82,7 +83,7 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
         ipv4_address = "{{ .ip }}"
         ipv4_netmask = "{{ .zone.netMask }}"
       }
-      ipv4_gateway = "{{ .zone.vcGateway}}"
+      ipv4_gateway = "{{ .zone.gateway}}"
     }
   }
 }

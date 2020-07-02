@@ -21,7 +21,7 @@ func TestKotfIint(t *testing.T) {
 	//	fmt.Println(err)
 	//}
 	//fmt.Println(result)
-	client := NewKotfClient("localhost", 8080)
+	client := NewKotfClient("localhost", 8083)
 	result, err := client.Init("", "", "", "", "")
 	if err != nil {
 		fmt.Println(err)

@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"html/template"
 	"io"
 	"os"
 	"path"
@@ -59,4 +60,22 @@ func MoveFileToPath(sourcePath string, filename string, targetPath string) error
 			return nil
 		}
 	}
+}
+
+func CoverFileVars(filePath string, vars map[string]interface{}, targetPath string) error {
+	f, err := template.ParseFiles(filePath)
+	if err != nil {
+		return err
+	}
+
+	t, err := os.Create(targetPath)
+	if err != nil {
+		return err
+	}
+	err = f.Execute(t, vars)
+	if err != nil {
+		return err
+	}
+	t.Close()
+	return nil
 }

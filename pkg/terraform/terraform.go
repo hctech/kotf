@@ -5,6 +5,7 @@ import (
 	"github.com/KubeOperator/kotf/pkg/constant"
 	"github.com/KubeOperator/kotf/util"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"path"
 )
@@ -18,7 +19,7 @@ func NewTerraform() *Terraform {
 
 func (t *Terraform) Init(cluster string, cloud string, vars map[string]interface{}) (string, error) {
 
-	dir := path.Join(constant.TerraformDir, cluster)
+	dir := path.Join(constant.ProjectDir, cluster)
 	exist, err := util.PathExists(dir)
 	if err != nil {
 		return "", err
@@ -29,11 +30,12 @@ func (t *Terraform) Init(cluster string, cloud string, vars map[string]interface
 			return "", err
 		}
 	}
+
 	filePath := ""
 	if cloud == constant.OpenStack {
 		filePath = constant.OpenStackFilePath
 	} else if cloud == constant.VSphere {
-		filePath = "/Users/zk.wang/go/src/github.com/kotf/resource/vsphere"
+		filePath = constant.VSphereFilePath
 	} else {
 		return "", errors.New("not support")
 	}
@@ -41,8 +43,18 @@ func (t *Terraform) Init(cluster string, cloud string, vars map[string]interface
 	if err != nil {
 		return "", err
 	}
+	templateFilePath := path.Join(dir, constant.TerraformFile)
+	err = util.CoverFileVars(templateFilePath, vars, path.Join(dir, constant.MainFile))
+	if err != nil {
+		return "", err
+	}
+	err = os.Remove(templateFilePath)
+	if err != nil {
+		return "", err
+	}
 
-	cmd := exec.Command("terraform", "init")
+	cmd := exec.Command(constant.TerraformCommand, constant.TerraformInit)
+	cmd.Dir = dir
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return "", err
@@ -56,5 +68,25 @@ func (t *Terraform) Init(cluster string, cloud string, vars map[string]interface
 	} else {
 		return string(opBytes), err
 	}
-	return "", err
+}
+
+func (t *Terraform) Apply(cluster string) (string, error) {
+
+	dir := path.Join(constant.ProjectDir, cluster)
+	cmd := exec.Command(constant.TerraformCommand, constant.TerraformApply, constant.TerraformApplyApprove)
+	cmd.Dir = dir
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return "", err
+	}
+	defer stdout.Close()
+	if err := cmd.Start(); err != nil {
+		return "", err
+	}
+	if opBytes, err := ioutil.ReadAll(stdout); err != nil {
+		return "", err
+	} else {
+		return string(opBytes), err
+	}
+
 }

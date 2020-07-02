@@ -8,13 +8,17 @@ const (
 )
 
 var (
-	BaseDir           = "/var/kotf"
-	ResourceDir       = "resource"
-	TerraformFile     = "terraform.tf"
-	DataDir           = path.Join(BaseDir, "data")
-	TerraformDir      = path.Join(BaseDir, "terraform")
-	WorkDir           = path.Join(BaseDir, "work")
-	OpenStackFilePath = path.Join(ResourceDir, "openstack")
-	VSphereFilePath   = path.Join(ResourceDir, "vsphere")
-	ProjectDir        = path.Join(DataDir, "project")
+	BaseDir               = "/var/kotf"
+	TerraformFile         = "terraform.tf"
+	MainFile              = "main.tf"
+	DataDir               = path.Join(BaseDir, "data")
+	WorkDir               = path.Join(BaseDir, "work")
+	ProjectDir            = path.Join(DataDir, "project")
+	ResourceDir           = path.Join(DataDir, "resource")
+	OpenStackFilePath     = path.Join(ResourceDir, "openstack")
+	VSphereFilePath       = path.Join(ResourceDir, "vsphere")
+	TerraformCommand      = "terraform"
+	TerraformInit         = "init"
+	TerraformApply        = "apply"
+	TerraformApplyApprove = "-auto-approve"
 )

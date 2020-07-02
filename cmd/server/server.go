@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/KubeOperator/kotf/api"
+	"github.com/KubeOperator/kotf/pkg/server"
 	"google.golang.org/grpc"
 	"net"
 )
@@ -14,7 +16,7 @@ func newTcpListener(address string) (*net.Listener, error) {
 }
 func newServer() *grpc.Server {
 	gs := grpc.NewServer()
-	//kotf := server.NewKotf()
-	//api.(gs, kobe)
+	kotf := server.NewKotf()
+	api.RegisterKotfApiServer(gs, kotf)
 	return gs
 }

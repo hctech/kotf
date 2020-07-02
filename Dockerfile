@@ -1,6 +1,6 @@
 FROM golang:1.14-alpine as stage-build
 LABEL stage=stage-build
-WORKDIR /build/koft
+WORKDIR /build/kotf
 ARG GOPROXY
 ENV GOPROXY=$GOPROXY
 ENV GO111MODULE=on
@@ -21,16 +21,14 @@ RUN make build_server_linux
 COPY ./resource/install_terraform.sh /build/kotf/install_terraform.sh
 RUN bash /build/kotf/install_terraform.sh
 
-COPY . /build/kotf/
-
-
-FROM golang:1.14-alpine
+FROM alpine:3.11
 
 COPY --from=stage-build /build/kotf/dist/etc/ /etc/
 COPY --from=stage-build /build/kotf/dist/usr/ /usr/
-#COPY --from=stage-build /build/kotf/dist/var/ /var/
+COPY --from=stage-build /build/kotf/terraform /usr/local/bin/
+COPY --from=stage-build /build/kotf/dist/var/ /var/
 
-VOLUME ["/var/koft/data"]
+VOLUME ["/var/kotf/data"]
 
 EXPOSE 8080
 

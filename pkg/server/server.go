@@ -7,31 +7,31 @@ import (
 	"golang.org/x/net/context"
 )
 
-type kotf struct {
+type Kotf struct {
 }
 
-func NewKotf() *kotf {
-	return &kotf{}
+func NewKotf() *Kotf {
+	return &Kotf{}
 }
 
-func (k kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.Result, error) {
+func (k Kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.Result, error) {
+
 	t := terraform.NewTerraform()
-
 	resp := &api.Result{
 		Success: false,
 	}
 
 	var provider map[string]interface{}
-	if err := json.Unmarshal([]byte(req.Provider), &provider); err == nil {
-		return resp, nil
+	if err := json.Unmarshal([]byte(req.Provider), &provider); err != nil {
+		return resp, err
 	}
 	var cloudRegion map[string]interface{}
-	if err := json.Unmarshal([]byte(req.CloudRegion), &cloudRegion); err == nil {
-		return resp, nil
+	if err := json.Unmarshal([]byte(req.CloudRegion), &cloudRegion); err != nil {
+		return resp, err
 	}
-	var hosts map[string]interface{}
-	if err := json.Unmarshal([]byte(req.Hosts), &hosts); err == nil {
-		return resp, nil
+	var hosts []interface{}
+	if err := json.Unmarshal([]byte(req.Hosts), &hosts); err != nil {
+		return resp, err
 	}
 	vars := map[string]interface{}{
 		"provider":    provider,
@@ -40,6 +40,20 @@ func (k kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.Res
 	}
 
 	output, err := t.Init(req.ClusterName, req.Type, vars)
+	if err != nil {
+		return nil, err
+	}
+	resp.Output = output
+	resp.Success = true
+	return resp, nil
+}
+
+func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.Result, error) {
+	t := terraform.NewTerraform()
+	resp := &api.Result{
+		Success: false,
+	}
+	output, err := t.Apply(req.ClusterName)
 	if err != nil {
 		return nil, err
 	}
