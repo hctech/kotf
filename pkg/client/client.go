@@ -44,7 +44,7 @@ func (c *KotfClient) Init(clusterName string, cloudType string, provider string,
 	}
 	result, err := client.Init(context.Background(), &req)
 	if err != nil {
-		return nil, err
+		return result, err
 	}
 	return result, nil
 }
@@ -61,7 +61,7 @@ func (c *KotfClient) Apply(clusterName string) (*api.Result, error) {
 	}
 	result, err := client.Apply(context.Background(), &req)
 	if err != nil {
-		return nil, err
+		return result, err
 	}
 	return result, nil
 }

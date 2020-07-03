@@ -1,10 +1,10 @@
 package terraform
 
 import (
+	"bytes"
 	"errors"
 	"github.com/KubeOperator/kotf/pkg/constant"
 	"github.com/KubeOperator/kotf/util"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
@@ -53,40 +53,47 @@ func (t *Terraform) Init(cluster string, cloud string, vars map[string]interface
 		return "", err
 	}
 
-	cmd := exec.Command(constant.TerraformCommand, constant.TerraformInit)
-	cmd.Dir = dir
-	stdout, err := cmd.StdoutPipe()
+	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformInit)
 	if err != nil {
-		return "", err
+		return result, err
 	}
-	defer stdout.Close()
-	if err := cmd.Start(); err != nil {
-		return "", err
-	}
-	if opBytes, err := ioutil.ReadAll(stdout); err != nil {
-		return "", err
-	} else {
-		return string(opBytes), err
-	}
+	return result, err
 }
 
 func (t *Terraform) Apply(cluster string) (string, error) {
 
 	dir := path.Join(constant.ProjectDir, cluster)
-	cmd := exec.Command(constant.TerraformCommand, constant.TerraformApply, constant.TerraformApplyApprove)
-	cmd.Dir = dir
+	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformApply, constant.TerraformApplyApprove)
+	if err != nil {
+		return result, err
+	}
+	return result, err
+}
+
+func ExecCommand(path string, name string, arg ...string) (string, error) {
+	cmd := exec.Command(name, arg...)
+	cmd.Dir = path
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
 		return "", err
 	}
-	defer stdout.Close()
-	if err := cmd.Start(); err != nil {
+	cmd.Stderr = cmd.Stdout
+	if err = cmd.Start(); err != nil {
 		return "", err
-	}
-	if opBytes, err := ioutil.ReadAll(stdout); err != nil {
-		return "", err
-	} else {
-		return string(opBytes), err
 	}
 
+	var buffer bytes.Buffer
+	for {
+		out := make([]byte, 1024)
+		_, err := stdout.Read(out)
+		buffer.Write(out)
+		if err != nil {
+			break
+		}
+	}
+
+	if err = cmd.Wait(); err != nil {
+		return string(buffer.Bytes()), err
+	}
+	return string(buffer.Bytes()), nil
 }

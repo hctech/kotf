@@ -19,10 +19,15 @@ COPY . .
 RUN make build_server_linux
 
 COPY ./resource/install_terraform.sh /build/kotf/install_terraform.sh
-RUN bash /build/kotf/install_terraform.sh
+RUN bash install_terraform.sh
+
+RUN mkdir -p /build/kotf/plugins/
+COPY /resource/plugins/  /build/kotf/plugins/
 
 FROM alpine:3.11
 
+RUN mkdir -p /root/.terraform.d/plugins/
+COPY --from=stage-build /build/kotf/plugins/ /root/.terraform.d/plugins/
 COPY --from=stage-build /build/kotf/dist/etc/ /etc/
 COPY --from=stage-build /build/kotf/dist/usr/ /usr/
 COPY --from=stage-build /build/kotf/terraform /usr/local/bin/

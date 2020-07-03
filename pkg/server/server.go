@@ -4,7 +4,12 @@ import (
 	"encoding/json"
 	"github.com/KubeOperator/kotf/api"
 	"github.com/KubeOperator/kotf/pkg/terraform"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"golang.org/x/net/context"
+	spb "google.golang.org/genproto/googleapis/rpc/status"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type Kotf struct {
@@ -20,7 +25,6 @@ func (k Kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.Res
 	resp := &api.Result{
 		Success: false,
 	}
-
 	var provider map[string]interface{}
 	if err := json.Unmarshal([]byte(req.Provider), &provider); err != nil {
 		return resp, err
@@ -41,7 +45,14 @@ func (k Kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.Res
 
 	output, err := t.Init(req.ClusterName, req.Type, vars)
 	if err != nil {
-		return nil, err
+		resp.Output = output
+		detail, _ := ptypes.MarshalAny(resp)
+		s := spb.Status{
+			Code:    int32(codes.FailedPrecondition),
+			Message: err.Error(),
+			Details: []*any.Any{detail},
+		}
+		return resp, status.ErrorProto(&s)
 	}
 	resp.Output = output
 	resp.Success = true
@@ -55,7 +66,14 @@ func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.R
 	}
 	output, err := t.Apply(req.ClusterName)
 	if err != nil {
-		return nil, err
+		resp.Output = output
+		detail, _ := ptypes.MarshalAny(resp)
+		s := spb.Status{
+			Code:    int32(codes.FailedPrecondition),
+			Message: err.Error(),
+			Details: []*any.Any{detail},
+		}
+		return resp, status.ErrorProto(&s)
 	}
 	resp.Output = output
 	resp.Success = true
