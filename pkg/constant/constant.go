@@ -3,7 +3,7 @@ package constant
 import "path"
 
 const (
-	OpenStack = "openStack"
+	OpenStack = "OpenStack"
 	VSphere   = "vSphere"
 )
 
