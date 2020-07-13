@@ -226,6 +226,61 @@ func (x *TerraformApplyRequest) GetType() string {
 	return ""
 }
 
+type TerraformDestroyRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ClusterName string `protobuf:"bytes,1,opt,name=clusterName,proto3" json:"clusterName,omitempty"`
+	Type        string `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+}
+
+func (x *TerraformDestroyRequest) Reset() {
+	*x = TerraformDestroyRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_kotf_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TerraformDestroyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TerraformDestroyRequest) ProtoMessage() {}
+
+func (x *TerraformDestroyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_kotf_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TerraformDestroyRequest.ProtoReflect.Descriptor instead.
+func (*TerraformDestroyRequest) Descriptor() ([]byte, []int) {
+	return file_kotf_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *TerraformDestroyRequest) GetClusterName() string {
+	if x != nil {
+		return x.ClusterName
+	}
+	return ""
+}
+
+func (x *TerraformDestroyRequest) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
 var File_kotf_proto protoreflect.FileDescriptor
 
 var file_kotf_proto_rawDesc = []byte{
@@ -250,14 +305,23 @@ var file_kotf_proto_rawDesc = []byte{
 	0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x4e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x0b, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x12, 0x0a,
 	0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79, 0x70,
-	0x65, 0x32, 0x6f, 0x0a, 0x07, 0x4b, 0x6f, 0x74, 0x66, 0x41, 0x70, 0x69, 0x12, 0x30, 0x0a, 0x04,
-	0x49, 0x6e, 0x69, 0x74, 0x12, 0x19, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x54, 0x65, 0x72, 0x72, 0x61,
-	0x66, 0x6f, 0x72, 0x6d, 0x49, 0x6e, 0x69, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x0b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x12, 0x32,
-	0x0a, 0x05, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x12, 0x1a, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x54, 0x65,
-	0x72, 0x72, 0x61, 0x66, 0x6f, 0x72, 0x6d, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x0b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74,
-	0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x22, 0x4f, 0x0a, 0x17, 0x54, 0x65, 0x72, 0x72, 0x61, 0x66, 0x6f, 0x72, 0x6d, 0x44, 0x65,
+	0x73, 0x74, 0x72, 0x6f, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x20, 0x0a, 0x0b,
+	0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x4e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x0b, 0x63, 0x6c, 0x75, 0x73, 0x74, 0x65, 0x72, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x12,
+	0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79,
+	0x70, 0x65, 0x32, 0xa7, 0x01, 0x0a, 0x07, 0x4b, 0x6f, 0x74, 0x66, 0x41, 0x70, 0x69, 0x12, 0x30,
+	0x0a, 0x04, 0x49, 0x6e, 0x69, 0x74, 0x12, 0x19, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x54, 0x65, 0x72,
+	0x72, 0x61, 0x66, 0x6f, 0x72, 0x6d, 0x49, 0x6e, 0x69, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x0b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00,
+	0x12, 0x32, 0x0a, 0x05, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x12, 0x1a, 0x2e, 0x61, 0x70, 0x69, 0x2e,
+	0x54, 0x65, 0x72, 0x72, 0x61, 0x66, 0x6f, 0x72, 0x6d, 0x41, 0x70, 0x70, 0x6c, 0x79, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0b, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x22, 0x00, 0x12, 0x36, 0x0a, 0x07, 0x44, 0x65, 0x73, 0x74, 0x72, 0x6f, 0x79, 0x12,
+	0x1c, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x54, 0x65, 0x72, 0x72, 0x61, 0x66, 0x6f, 0x72, 0x6d, 0x44,
+	0x65, 0x73, 0x74, 0x72, 0x6f, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0b, 0x2e,
+	0x61, 0x70, 0x69, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -272,19 +336,22 @@ func file_kotf_proto_rawDescGZIP() []byte {
 	return file_kotf_proto_rawDescData
 }
 
-var file_kotf_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_kotf_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_kotf_proto_goTypes = []interface{}{
-	(*Result)(nil),                // 0: api.Result
-	(*TerraformInitRequest)(nil),  // 1: api.TerraformInitRequest
-	(*TerraformApplyRequest)(nil), // 2: api.TerraformApplyRequest
+	(*Result)(nil),                  // 0: api.Result
+	(*TerraformInitRequest)(nil),    // 1: api.TerraformInitRequest
+	(*TerraformApplyRequest)(nil),   // 2: api.TerraformApplyRequest
+	(*TerraformDestroyRequest)(nil), // 3: api.TerraformDestroyRequest
 }
 var file_kotf_proto_depIdxs = []int32{
 	1, // 0: api.KotfApi.Init:input_type -> api.TerraformInitRequest
 	2, // 1: api.KotfApi.Apply:input_type -> api.TerraformApplyRequest
-	0, // 2: api.KotfApi.Init:output_type -> api.Result
-	0, // 3: api.KotfApi.Apply:output_type -> api.Result
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	3, // 2: api.KotfApi.Destroy:input_type -> api.TerraformDestroyRequest
+	0, // 3: api.KotfApi.Init:output_type -> api.Result
+	0, // 4: api.KotfApi.Apply:output_type -> api.Result
+	0, // 5: api.KotfApi.Destroy:output_type -> api.Result
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -332,6 +399,18 @@ func file_kotf_proto_init() {
 				return nil
 			}
 		}
+		file_kotf_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*TerraformDestroyRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -339,7 +418,7 @@ func file_kotf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_kotf_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -367,6 +446,7 @@ const _ = grpc.SupportPackageIsVersion6
 type KotfApiClient interface {
 	Init(ctx context.Context, in *TerraformInitRequest, opts ...grpc.CallOption) (*Result, error)
 	Apply(ctx context.Context, in *TerraformApplyRequest, opts ...grpc.CallOption) (*Result, error)
+	Destroy(ctx context.Context, in *TerraformDestroyRequest, opts ...grpc.CallOption) (*Result, error)
 }
 
 type kotfApiClient struct {
@@ -395,10 +475,20 @@ func (c *kotfApiClient) Apply(ctx context.Context, in *TerraformApplyRequest, op
 	return out, nil
 }
 
+func (c *kotfApiClient) Destroy(ctx context.Context, in *TerraformDestroyRequest, opts ...grpc.CallOption) (*Result, error) {
+	out := new(Result)
+	err := c.cc.Invoke(ctx, "/api.KotfApi/Destroy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KotfApiServer is the server API for KotfApi service.
 type KotfApiServer interface {
 	Init(context.Context, *TerraformInitRequest) (*Result, error)
 	Apply(context.Context, *TerraformApplyRequest) (*Result, error)
+	Destroy(context.Context, *TerraformDestroyRequest) (*Result, error)
 }
 
 // UnimplementedKotfApiServer can be embedded to have forward compatible implementations.
@@ -410,6 +500,9 @@ func (*UnimplementedKotfApiServer) Init(context.Context, *TerraformInitRequest) 
 }
 func (*UnimplementedKotfApiServer) Apply(context.Context, *TerraformApplyRequest) (*Result, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Apply not implemented")
+}
+func (*UnimplementedKotfApiServer) Destroy(context.Context, *TerraformDestroyRequest) (*Result, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
 }
 
 func RegisterKotfApiServer(s *grpc.Server, srv KotfApiServer) {
@@ -452,6 +545,24 @@ func _KotfApi_Apply_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
+func _KotfApi_Destroy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TerraformDestroyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KotfApiServer).Destroy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.KotfApi/Destroy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KotfApiServer).Destroy(ctx, req.(*TerraformDestroyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _KotfApi_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "api.KotfApi",
 	HandlerType: (*KotfApiServer)(nil),
@@ -463,6 +574,10 @@ var _KotfApi_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Apply",
 			Handler:    _KotfApi_Apply_Handler,
+		},
+		{
+			MethodName: "Destroy",
+			Handler:    _KotfApi_Destroy_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

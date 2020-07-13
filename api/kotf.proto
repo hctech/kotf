@@ -5,6 +5,7 @@ package api;
 service KotfApi {
   rpc Init(TerraformInitRequest) returns (Result){}
   rpc Apply(TerraformApplyRequest) returns (Result){}
+  rpc Destroy(TerraformDestroyRequest) returns (Result){}
 }
 
 message Result {
@@ -26,3 +27,7 @@ message TerraformApplyRequest {
   string type = 2;
 }
 
+message TerraformDestroyRequest {
+  string clusterName = 1;
+  string type = 2;
+}

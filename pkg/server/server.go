@@ -79,3 +79,24 @@ func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.R
 	resp.Success = true
 	return resp, nil
 }
+
+func (k Kotf) Destroy(ctx context.Context, req *api.TerraformApplyRequest) (*api.Result, error) {
+	t := terraform.NewTerraform()
+	resp := &api.Result{
+		Success: false,
+	}
+	output, err := t.Destroy(req.ClusterName)
+	if err != nil {
+		resp.Output = output
+		detail, _ := ptypes.MarshalAny(resp)
+		s := spb.Status{
+			Code:    int32(codes.FailedPrecondition),
+			Message: err.Error(),
+			Details: []*any.Any{detail},
+		}
+		return resp, status.ErrorProto(&s)
+	}
+	resp.Output = output
+	resp.Success = true
+	return resp, nil
+}

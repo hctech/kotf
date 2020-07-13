@@ -70,6 +70,15 @@ func (t *Terraform) Apply(cluster string) (string, error) {
 	return result, err
 }
 
+func (t *Terraform) Destroy(cluster string) (string, error) {
+	dir := path.Join(constant.ProjectDir, cluster)
+	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformDestroy)
+	if err != nil {
+		return result, err
+	}
+	return result, err
+}
+
 func ExecCommand(path string, name string, arg ...string) (string, error) {
 	cmd := exec.Command(name, arg...)
 	cmd.Dir = path

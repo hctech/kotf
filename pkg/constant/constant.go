@@ -20,5 +20,6 @@ var (
 	TerraformCommand      = "terraform"
 	TerraformInit         = "init"
 	TerraformApply        = "apply"
+	TerraformDestroy      = "destroy"
 	TerraformApplyApprove = "-auto-approve"
 )
