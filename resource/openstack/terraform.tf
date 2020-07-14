@@ -20,7 +20,7 @@ provider "openstack" {
     {{ if  eq .zone.ipType "private" }}
         resource "openstack_networking_port_v2" "{{.shortName}}" {
           name               = "{{.shortName}}"
-          network_id = "{{.zone.network}}"
+          network_id         = "{{.zone.network}}"
           admin_state_up     = "true"
           fixed_ip {
             subnet_id  = "{{.zone.subnet}}"
@@ -30,8 +30,8 @@ provider "openstack" {
 
         resource "openstack_compute_instance_v2" "{{.shortName}}" {
           name            = "{{.name}}"
-          image_name        = "{{.zone.imageName}}"
-          flavor_name          = "{{.model}}"
+          image_name      = "{{.zone.imageName}}"
+          flavor_name     = "{{.model}}"
 
           admin_pass = "KubeOperator@2019"
           user_data = "#!/bin/sh \necho 'root:KubeOperator@2019' | chpasswd"
@@ -42,14 +42,14 @@ provider "openstack" {
         }
     {{ else if eq .zone.ipType "floating" }}
           resource "openstack_networking_port_v2" "{{.shortName}}" {
-             name           = "{{.shortName}}"
-             admin_state_up = "true"
-             network_id = "{{.zone.network}}"
+             name            = "{{.shortName}}"
+             admin_state_up  = "true"
+             network_id      = "{{.zone.network}}"
            }
             resource "openstack_compute_instance_v2" "{{.shortName}}" {
               name            = "{{.name}}"
-              image_name        = "{{.zone.imageName}}"
-              flavor_name          = "{{.model}}"
+              image_name      = "{{.zone.imageName}}"
+              flavor_name     = "{{.model}}"
               admin_pass = "KubeOperator@2019"
               user_data = "#!/bin/sh \necho 'root:KubeOperator@2019' | chpasswd"
               security_groups = ["{{.zone.securityGroup}}"]

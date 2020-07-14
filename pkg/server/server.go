@@ -80,7 +80,7 @@ func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.R
 	return resp, nil
 }
 
-func (k Kotf) Destroy(ctx context.Context, req *api.TerraformApplyRequest) (*api.Result, error) {
+func (k Kotf) Destroy(ctx context.Context, req *api.TerraformDestroyRequest) (*api.Result, error) {
 	t := terraform.NewTerraform()
 	resp := &api.Result{
 		Success: false,
