@@ -53,7 +53,7 @@ func (t *Terraform) Init(cluster string, cloud string, vars map[string]interface
 		return "", err
 	}
 
-	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformInit)
+	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformInit, constant.TerraformNoColor)
 	if err != nil {
 		return result, err
 	}
@@ -63,7 +63,7 @@ func (t *Terraform) Init(cluster string, cloud string, vars map[string]interface
 func (t *Terraform) Apply(cluster string) (string, error) {
 
 	dir := path.Join(constant.ProjectDir, cluster)
-	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformApply, constant.TerraformApplyApprove)
+	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformApply, constant.TerraformApplyApprove, constant.TerraformNoColor)
 	if err != nil {
 		return result, err
 	}
@@ -72,7 +72,7 @@ func (t *Terraform) Apply(cluster string) (string, error) {
 
 func (t *Terraform) Destroy(cluster string) (string, error) {
 	dir := path.Join(constant.ProjectDir, cluster)
-	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformDestroy)
+	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformDestroy, constant.TerraformNoColor)
 	if err != nil {
 		return result, err
 	}

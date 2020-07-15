@@ -22,4 +22,5 @@ var (
 	TerraformApply        = "apply"
 	TerraformDestroy      = "destroy"
 	TerraformApplyApprove = "-auto-approve"
+	TerraformNoColor      = "-no-color"
 )
