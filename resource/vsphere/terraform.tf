@@ -17,10 +17,10 @@ data "vsphere_datacenter" "dc" {
 
 {{ range $region.zones}}
 data "vsphere_resource_pool" "{{ .key }}" {
-  {{ if  eq .name "Resources" }}
+  {{ if  eq .resourcePool "Resources" }}
    name  = "{{ .cluster }}/Resources"
-  {{ else if ne .name "Resources" }}
-   name  = "{{ .cluster }}/Resources/{{ .name }}"
+  {{ else if ne .resourcePool "Resources" }}
+   name  = "{{ .cluster }}/Resources/{{ .resourcePool }}"
   {{ end }}
    datacenter_id = data.vsphere_datacenter.dc.id
 }
@@ -50,7 +50,7 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
   datastore_id = data.vsphere_datastore.{{ .zone.key }}.id
   num_cpus = {{ .cpu }}
   memory = {{ .memory }}
-  guest_id = "{{ .zone.guestId }}"
+  guest_id = data.vsphere_virtual_machine.{{ .zone.key }}.guest_id
 
   network_interface {
     network_id = data.vsphere_network.{{ .zone.key }}.id
@@ -76,7 +76,6 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
 
       linux_options {
         host_name = "{{ .shortName }}"
-        domain = "{{ .domain }}"
       }
 
       network_interface {
@@ -84,6 +83,7 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
         ipv4_netmask = "{{ .zone.netMask }}"
       }
       ipv4_gateway = "{{ .zone.gateway}}"
+      dns_server_list = ["{{ .zone.dns1 }}, {{ .zone.dns2 }}"]
     }
   }
 }

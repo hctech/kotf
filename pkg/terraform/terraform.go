@@ -72,7 +72,7 @@ func (t *Terraform) Apply(cluster string) (string, error) {
 
 func (t *Terraform) Destroy(cluster string) (string, error) {
 	dir := path.Join(constant.ProjectDir, cluster)
-	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformDestroy, constant.TerraformNoColor)
+	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformDestroy, constant.TerraformApplyApprove, constant.TerraformNoColor)
 	if err != nil {
 		return result, err
 	}
