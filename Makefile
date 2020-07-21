@@ -34,4 +34,4 @@ clean:
 
 docker:
 	@echo "build docker images"
-	docker build -t kubeoperator/kotf --build-arg GOPROXY=$(GOPROXY) .
+	docker build -t kubeoperator/kotf:master --build-arg GOPROXY=$(GOPROXY) .
