@@ -76,6 +76,7 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
 
       linux_options {
         host_name = "{{ .shortName }}"
+        domain = ""
       }
 
       network_interface {
@@ -83,7 +84,7 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
         ipv4_netmask = "{{ .zone.netMask }}"
       }
       ipv4_gateway = "{{ .zone.gateway}}"
-      dns_server_list = ["{{ .zone.dns1 }}, {{ .zone.dns2 }}"]
+      dns_server_list = [ "{{ .zone.dns1 }}", "{{ .zone.dns2 }}"]
     }
   }
 }
