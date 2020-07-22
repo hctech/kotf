@@ -13,18 +13,8 @@ BASE_DIR=var/kotf
 RESOURCE_DIR=data/resource
 GOPROXY="https://goproxy.cn,direct"
 
-build_linux:
-	GOOS=linux GOARCH=amd64  $(GOBUILD) -o $(BUILDDIR)/$(BIN_DIR)/$(KOTF_SERVER_NAME) $(KOTF_SRC)/server/*.go
-	mkdir -p $(BUILDDIR)/$(CONFIG_DIR) && cp -r  $(BASEPATH)/conf/* $(BUILDDIR)/$(CONFIG_DIR)
-	mkdir -p $(BUILDDIR)/${BASE_DIR}/$(RESOURCE_DIR) && cp -r  $(BASEPATH)/resource/* $(BUILDDIR)/${BASE_DIR}/$(RESOURCE_DIR)
-
-build_darwin:
-	GOOS=darwin GOARCH=amd64  $(GOBUILD) -o $(BUILDDIR)/$(BIN_DIR)/$(KOTF_SERVER_NAME) $(KOTF_SRC)/server/*.go
-	mkdir -p $(BUILDDIR)/$(CONFIG_DIR) && cp -r  $(BASEPATH)/conf/* $(BUILDDIR)/$(CONFIG_DIR)
-	mkdir -p $(BUILDDIR)/${BASE_DIR}/$(RESOURCE_DIR) && cp -r  $(BASEPATH)/resource/* $(BUILDDIR)/${BASE_DIR}/$(RESOURCE_DIR)
-
 build_server_linux:
-	GOOS=linux GOARCH=amd64  $(GOBUILD) -o $(BUILDDIR)/$(BIN_DIR)/$(KOTF_CLIENT_NAME) $(KOTF_SRC)/server/*.go
+	GOOS=linux GOARCH=amd64  $(GOBUILD) -o $(BUILDDIR)/$(BIN_DIR)/$(KOTF_SERVER_NAME) $(KOTF_SRC)/server/*.go
 	mkdir -p $(BUILDDIR)/$(CONFIG_DIR) && cp -r  $(BASEPATH)/conf/* $(BUILDDIR)/$(CONFIG_DIR)
 	mkdir -p $(BUILDDIR)/${BASE_DIR}/$(RESOURCE_DIR) && cp -r  $(BASEPATH)/resource/* $(BUILDDIR)/${BASE_DIR}/$(RESOURCE_DIR)
 
