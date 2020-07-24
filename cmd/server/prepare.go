@@ -8,7 +8,6 @@ import (
 func prepareStart() error {
 	funcs := []func() error{
 		makeDataDir,
-		cleanWorkPath,
 	}
 	for _, f := range funcs {
 		if err := f(); err != nil {
@@ -23,10 +22,5 @@ func makeDataDir() error {
 	if err != nil {
 		return err
 	}
-	return nil
-}
-
-func cleanWorkPath() error {
-	_ = os.RemoveAll(constant.WorkDir)
 	return nil
 }
