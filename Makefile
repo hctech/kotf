@@ -10,7 +10,7 @@ KOTF_SERVER_NAME=kotf-server
 BIN_DIR=usr/local/bin
 CONFIG_DIR=etc/kotf
 BASE_DIR=var/kotf
-RESOURCE_DIR=data/resource
+RESOURCE_DIR=resource
 GOPROXY="https://goproxy.cn,direct"
 
 build_server_linux:

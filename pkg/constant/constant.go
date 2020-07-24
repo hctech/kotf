@@ -12,9 +12,8 @@ var (
 	TerraformFile         = "terraform.tf"
 	MainFile              = "main.tf"
 	DataDir               = path.Join(BaseDir, "data")
-	WorkDir               = path.Join(BaseDir, "work")
 	ProjectDir            = path.Join(DataDir, "project")
-	ResourceDir           = path.Join(DataDir, "resource")
+	ResourceDir           = path.Join(BaseDir, "resource")
 	OpenStackFilePath     = path.Join(ResourceDir, "openstack")
 	VSphereFilePath       = path.Join(ResourceDir, "vsphere")
 	TerraformCommand      = "terraform"
