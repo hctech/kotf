@@ -50,8 +50,6 @@ provider "openstack" {
               name            = "{{.name}}"
               image_name      = "{{.zone.imageName}}"
               flavor_name     = "{{.model}}"
-              admin_pass = "KubeOperator@2019"
-              user_data = "#!/bin/sh \necho 'root:KubeOperator@2019' | chpasswd"
               security_groups = ["{{.zone.securityGroup}}"]
               network {
                 port = "${openstack_networking_port_v2.{{.shortName}}.id}"
