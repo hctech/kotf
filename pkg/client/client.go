@@ -65,3 +65,20 @@ func (c *KotfClient) Apply(clusterName string) (*api.Result, error) {
 	}
 	return result, nil
 }
+
+func (c *KotfClient) Destroy(clusterName string) (*api.Result, error) {
+	conn, err := c.createConnection()
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+	client := api.NewKotfApiClient(conn)
+	req := api.TerraformDestroyRequest{
+		ClusterName: clusterName,
+	}
+	result, err := client.Destroy(context.Background(), &req)
+	if err != nil {
+		return result, err
+	}
+	return result, nil
+}
