@@ -14,7 +14,7 @@ RESOURCE_DIR=resource
 GOPROXY="https://goproxy.cn,direct"
 
 build_server_linux:
-	GOOS=linux GOARCH=amd64  $(GOBUILD) -o $(BUILDDIR)/$(BIN_DIR)/$(KOTF_SERVER_NAME) $(KOTF_SRC)/server/*.go
+	GOOS=linux GOARCH=$(GOARCH)  $(GOBUILD) -o $(BUILDDIR)/$(BIN_DIR)/$(KOTF_SERVER_NAME) $(KOTF_SRC)/server/*.go
 	mkdir -p $(BUILDDIR)/$(CONFIG_DIR) && cp -r  $(BASEPATH)/conf/* $(BUILDDIR)/$(CONFIG_DIR)
 	mkdir -p $(BUILDDIR)/${BASE_DIR}/$(RESOURCE_DIR) && cp -r  $(BASEPATH)/resource/* $(BUILDDIR)/${BASE_DIR}/$(RESOURCE_DIR)
 
@@ -24,4 +24,4 @@ clean:
 
 docker:
 	@echo "build docker images"
-	docker build -t kubeoperator/kotf:master --build-arg GOPROXY=$(GOPROXY) .
+	docker build -t kubeoperator/kotf:master --build-arg GOPROXY=$(GOPROXY) --build-arg GOARCH=$(GOARCH) .
