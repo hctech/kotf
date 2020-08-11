@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/KubeOperator/kotf/api"
 	"github.com/KubeOperator/kotf/pkg/terraform"
 	"github.com/golang/protobuf/ptypes"
@@ -45,14 +46,7 @@ func (k Kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.Res
 
 	output, err := t.Init(req.ClusterName, req.Type, vars)
 	if err != nil {
-		resp.Output = output
-		detail, _ := ptypes.MarshalAny(resp)
-		s := spb.Status{
-			Code:    int32(codes.FailedPrecondition),
-			Message: err.Error(),
-			Details: []*any.Any{detail},
-		}
-		return resp, status.ErrorProto(&s)
+		return resp, errors.New(output)
 	}
 	resp.Output = output
 	resp.Success = true
@@ -67,13 +61,7 @@ func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.R
 	output, err := t.Apply(req.ClusterName)
 	if err != nil {
 		resp.Output = output
-		detail, _ := ptypes.MarshalAny(resp)
-		s := spb.Status{
-			Code:    int32(codes.FailedPrecondition),
-			Message: err.Error(),
-			Details: []*any.Any{detail},
-		}
-		return resp, status.ErrorProto(&s)
+		return resp, errors.New(output)
 	}
 	resp.Output = output
 	resp.Success = true
