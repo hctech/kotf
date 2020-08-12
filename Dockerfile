@@ -23,7 +23,7 @@ RUN make build_server_linux GOARCH=$GOARCH
 
 RUN wget https://releases.hashicorp.com/terraform/0.12.28/terraform_0.12.28_linux_$GOARCH.zip -O /tmp/terraform_0.12.28_linux_$GOARCH.zip \
     && cd /tmp \
-    && unzip /tmp/terraform_0.12.28_linux_amd64.zip -d /build/kotf/
+    && unzip /tmp/terraform_0.12.28_linux_$GOARCH.zip -d /build/kotf/
 
 RUN mkdir -p /build/kotf/plugins/
 COPY /resource/plugins/  /build/kotf/plugins/
