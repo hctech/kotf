@@ -3,8 +3,9 @@ package constant
 import "path"
 
 const (
-	OpenStack = "OpenStack"
-	VSphere   = "vSphere"
+	OpenStack     = "OpenStack"
+	VSphere       = "vSphere"
+	FusionCompute = "FusionCompute"
 )
 
 var (
@@ -16,6 +17,7 @@ var (
 	ResourceDir           = path.Join(BaseDir, "resource")
 	OpenStackFilePath     = path.Join(ResourceDir, "openstack")
 	VSphereFilePath       = path.Join(ResourceDir, "vsphere")
+	FusionComputeFilePath = path.Join(ResourceDir, "fusioncompute")
 	TerraformCommand      = "terraform"
 	TerraformInit         = "init"
 	TerraformApply        = "apply"

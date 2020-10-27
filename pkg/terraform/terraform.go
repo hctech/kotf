@@ -30,12 +30,13 @@ func (t *Terraform) Init(cluster string, cloud string, vars map[string]interface
 			return "", err
 		}
 	}
-
 	filePath := ""
 	if cloud == constant.OpenStack {
 		filePath = constant.OpenStackFilePath
 	} else if cloud == constant.VSphere {
 		filePath = constant.VSphereFilePath
+	} else if cloud == constant.FusionCompute {
+		filePath = constant.FusionComputeFilePath
 	} else {
 		return "", errors.New("not support")
 	}
