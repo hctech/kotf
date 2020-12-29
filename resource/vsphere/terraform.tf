@@ -30,10 +30,16 @@ data "vsphere_network" "{{ .key }}" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-data "vsphere_datastore" "{{ .key }}" {
-  name = "{{ .datastore }}"
+
+{{ range .datastore}}
+
+data "vsphere_datastore" "{{ . }}" {
+  name = "{{ . }}"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
+
+{{ end }}
+
 
 data "vsphere_virtual_machine" "{{ .key }}" {
   name = "{{ .imageName }}"
@@ -47,7 +53,7 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
   name = "{{ .name }}"
   folder = "kubeoperator"
   resource_pool_id = data.vsphere_resource_pool.{{ .zone.key }}.id
-  datastore_id = data.vsphere_datastore.{{ .zone.key }}.id
+  datastore_id = data.vsphere_datastore.{{ .datastore }}.id
   num_cpus = {{ .cpu }}
   memory = {{ .memory }}
   guest_id = data.vsphere_virtual_machine.{{ .zone.key }}.guest_id

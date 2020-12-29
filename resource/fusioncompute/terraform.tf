@@ -33,10 +33,16 @@ data "fusioncompute_portgroup" "{{ .key }}" {
   site_uri = data.fusioncompute_site.site.id
 }
 
-data "fusioncompute_datastore" "{{ .key }}" {
-  name = "{{ .datastore }}"
+
+{{ range .datastore}}
+
+data "fusioncompute_datastore" "{{ . }}" {
+  name = "{{ . }}"
   site_uri = data.fusioncompute_site.site.id
 }
+
+{{ end }}
+
 
 data "fusioncompute_vm" "{{ .key }}" {
   name = "{{ .template }}"
@@ -52,7 +58,7 @@ resource "fusioncompute_vm" "{{.shortName}}" {
   memory = {{ .memory }}
   site_uri = data.fusioncompute_site.site.id
   cluster_uri = data.fusioncompute_cluster.{{ .zone.key }}.id
-  datastore_uri = data.fusioncompute_datastore.{{ .zone.key }}.id
+  datastore_uri = data.fusioncompute_datastore.{{ .datastore }}.id
   template_uri = data.fusioncompute_vm.{{ .zone.key }}.id
   network_interface {
     portgroup_uri = data.fusioncompute_portgroup.{{ .zone.key }}.id
