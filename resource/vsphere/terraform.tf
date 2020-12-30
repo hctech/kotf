@@ -62,12 +62,30 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
     network_id = data.vsphere_network.{{ .zone.key }}.id
   }
 
-  disk {
-    label            = "disk0"
-    size             = data.vsphere_virtual_machine.{{ .zone.key }}.disks.0.size
-    eagerly_scrub    = data.vsphere_virtual_machine.{{ .zone.key }}.disks.0.eagerly_scrub
-    thin_provisioned = data.vsphere_virtual_machine.{{ .zone.key }}.disks.0.thin_provisioned
-  }
+
+  {{ if not .zone.imageDisks }}
+    disk {
+      label            = "disk0"
+      size             = data.vsphere_virtual_machine.{{ .zone.key }}.disks.0.size
+      eagerly_scrub    = data.vsphere_virtual_machine.{{ .zone.key }}.disks.0.eagerly_scrub
+      thin_provisioned = data.vsphere_virtual_machine.{{ .zone.key }}.disks.0.thin_provisioned
+    }
+  {{ else }}
+    {{ $key := .zone.key}}
+    {{ range $i, $v := .zone.imageDisks }}
+        disk {
+          label            = "disk{{ $i }}"
+          size             = data.vsphere_virtual_machine.{{ $key }}.disks.{{ $i }}.size
+          eagerly_scrub    = data.vsphere_virtual_machine.{{ $key }}.disks.{{ $i }}.eagerly_scrub
+          thin_provisioned = data.vsphere_virtual_machine.{{ $key }}.disks.{{ $i }}.thin_provisioned
+      {{if gt $i 0}}
+           unit_number = {{ $i }}
+      {{end}}
+        }
+    {{ end }}
+  {{ end }}
+
+
 
   lifecycle {
     ignore_changes = [
