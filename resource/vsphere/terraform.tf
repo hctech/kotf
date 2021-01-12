@@ -53,7 +53,12 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
   name = "{{ .name }}"
   folder = "kubeoperator"
   resource_pool_id = data.vsphere_resource_pool.{{ .zone.key }}.id
-  datastore_id = data.vsphere_datastore.{{ .datastore }}.id
+
+  {{ if not .datastore }}
+     datastore_id = data.vsphere_datastore.{{ index .zone.datastore 0 }}.id
+  {{ else }}
+     datastore_id = data.vsphere_datastore.{{ .datastore }}.id
+  {{ end }}
   num_cpus = {{ .cpu }}
   memory = {{ .memory }}
   guest_id = data.vsphere_virtual_machine.{{ .zone.key }}.guest_id
