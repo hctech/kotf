@@ -25,6 +25,8 @@ COPY /resource/plugins/  /build/kotf/plugins/
 
 FROM kubeoperator/terraform:v0.12.28
 
+RUN echo > /etc/apk/repositories && echo -e "https://dl-cdn.alpinelinux.org/alpine/latest-stable/main\nhttps://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories && apk update && apk upgrade
+
 RUN mkdir -p /root/.terraform.d/plugins/
 COPY --from=stage-build /build/kotf/plugins/ /root/.terraform.d/plugins/
 COPY --from=stage-build /build/kotf/dist/etc/ /etc/
