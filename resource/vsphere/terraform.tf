@@ -62,6 +62,7 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
   num_cpus = {{ .cpu }}
   memory = {{ .memory }}
   guest_id = data.vsphere_virtual_machine.{{ .zone.key }}.guest_id
+  scsi_type = data.vsphere_virtual_machine.{{ .zone.key }}.scsi_type
 
   network_interface {
     network_id = data.vsphere_network.{{ .zone.key }}.id
