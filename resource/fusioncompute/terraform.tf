@@ -2,9 +2,17 @@
 {{ $region := .cloudRegion }}
 {{ $hosts := .hosts }}
 
+variable "user" {
+  type = string
+}
+
+variable "password" {
+   type = string
+}
+
 provider "fusioncompute" {
-  user =  "{{ $provider.user }}"
-  password = "{{ $provider.password }}"
+  user =  var.user
+  password = var.password
   server = "{{ $provider.server }}"
 }
 

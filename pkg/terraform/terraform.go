@@ -54,24 +54,27 @@ func (t *Terraform) Init(cluster string, cloud string, vars map[string]interface
 		return "", err
 	}
 
-	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformInit, constant.TerraformNoColor)
+	commands := []string{constant.TerraformInit, constant.TerraformNoColor}
+	result, err := ExecCommand(dir, constant.TerraformCommand, commands)
 	if err != nil {
 		return result, err
 	}
 	return result, err
 }
 
-func (t *Terraform) Apply(cluster string) (string, error) {
+func (t *Terraform) Apply(cluster string, vars []string) (string, error) {
 
 	dir := path.Join(constant.ProjectDir, cluster)
-	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformApply, constant.TerraformApplyApprove, constant.TerraformNoColor)
+	commands := []string{constant.TerraformApply, constant.TerraformApplyApprove, constant.TerraformNoColor}
+	varCommands := append(commands, vars...)
+	result, err := ExecCommand(dir, constant.TerraformCommand, varCommands)
 	if err != nil {
 		return result, err
 	}
 	return result, err
 }
 
-func (t *Terraform) Destroy(cluster string) (string, error) {
+func (t *Terraform) Destroy(cluster string, vars []string) (string, error) {
 	dir := path.Join(constant.ProjectDir, cluster)
 	exist, err := util.PathExists(dir)
 	if err != nil {
@@ -83,14 +86,16 @@ func (t *Terraform) Destroy(cluster string) (string, error) {
 			return "", err
 		}
 	}
-	result, err := ExecCommand(dir, constant.TerraformCommand, constant.TerraformDestroy, constant.TerraformApplyApprove, constant.TerraformNoColor)
+	commands := []string{constant.TerraformDestroy, constant.TerraformApplyApprove, constant.TerraformNoColor}
+	varCommands := append(commands, vars...)
+	result, err := ExecCommand(dir, constant.TerraformCommand, varCommands)
 	if err != nil {
 		return result, err
 	}
 	return result, err
 }
 
-func ExecCommand(path string, name string, arg ...string) (string, error) {
+func ExecCommand(path string, name string, arg []string) (string, error) {
 	cmd := exec.Command(name, arg...)
 	cmd.Dir = path
 	stdout, err := cmd.StdoutPipe()

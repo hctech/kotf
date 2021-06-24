@@ -49,7 +49,7 @@ func (c *KotfClient) Init(clusterName string, cloudType string, provider string,
 	return result, nil
 }
 
-func (c *KotfClient) Apply(clusterName string) (*api.Result, error) {
+func (c *KotfClient) Apply(clusterName string, regionVars string) (*api.Result, error) {
 	conn, err := c.createConnection()
 	if err != nil {
 		return nil, err
@@ -58,6 +58,7 @@ func (c *KotfClient) Apply(clusterName string) (*api.Result, error) {
 	client := api.NewKotfApiClient(conn)
 	req := api.TerraformApplyRequest{
 		ClusterName: clusterName,
+		CloudRegion: regionVars,
 	}
 	result, err := client.Apply(context.Background(), &req)
 	if err != nil {
@@ -66,7 +67,7 @@ func (c *KotfClient) Apply(clusterName string) (*api.Result, error) {
 	return result, nil
 }
 
-func (c *KotfClient) Destroy(clusterName string) (*api.Result, error) {
+func (c *KotfClient) Destroy(clusterName string, regionVars string) (*api.Result, error) {
 	conn, err := c.createConnection()
 	if err != nil {
 		return nil, err
@@ -75,6 +76,7 @@ func (c *KotfClient) Destroy(clusterName string) (*api.Result, error) {
 	client := api.NewKotfApiClient(conn)
 	req := api.TerraformDestroyRequest{
 		ClusterName: clusterName,
+		CloudRegion: regionVars,
 	}
 	result, err := client.Destroy(context.Background(), &req)
 	if err != nil {

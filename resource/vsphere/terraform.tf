@@ -2,9 +2,17 @@
 {{ $region := .cloudRegion }}
 {{ $hosts := .hosts }}
 
+variable "username" {
+  type = string
+}
+
+variable "password" {
+   type = string
+}
+
 provider "vsphere" {
-  user = "{{ $provider.username }}"
-  password = "{{ $provider.password }}"
+  user = var.username
+  password = var.password
   vsphere_server = "{{ $provider.host }}"
 
   # If you have a self-signed cert

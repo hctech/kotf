@@ -3,11 +3,18 @@
 {{ $hosts := .hosts }}
 
 
+variable "username" {
+  type = string
+}
+
+variable "password" {
+   type = string
+}
 
 provider "openstack" {
-  user_name   = "{{ $provider.username }}"
+  user_name   = var.username
   tenant_id   = "{{ $provider.projectId }}"
-  password    = "{{ $provider.password }}"
+  password    = var.password
   auth_url    = "{{ $provider.identity }}"
   region      = "{{ $region.datacenter }}"
   user_domain_name = "{{ $provider.domainName }}"

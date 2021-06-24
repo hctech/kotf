@@ -58,7 +58,21 @@ func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.R
 	resp := &api.Result{
 		Success: false,
 	}
-	output, err := t.Apply(req.ClusterName)
+	var cloudRegion map[string]interface{}
+	if err := json.Unmarshal([]byte(req.CloudRegion), &cloudRegion); err != nil {
+		return resp, err
+	}
+	var vars = make([]string, 0)
+	for k, v := range cloudRegion {
+		if !isVars(k) {
+			continue
+		}
+		if value, ok := v.(string); ok {
+			vars = append(vars, "-var")
+			vars = append(vars, k+"="+value)
+		}
+	}
+	output, err := t.Apply(req.ClusterName, vars)
 	if err != nil {
 		resp.Output = output
 		return resp, errors.New(output)
@@ -73,7 +87,21 @@ func (k Kotf) Destroy(ctx context.Context, req *api.TerraformDestroyRequest) (*a
 	resp := &api.Result{
 		Success: false,
 	}
-	output, err := t.Destroy(req.ClusterName)
+	var cloudRegion map[string]interface{}
+	if err := json.Unmarshal([]byte(req.CloudRegion), &cloudRegion); err != nil {
+		return resp, err
+	}
+	var vars = make([]string, 2)
+	for k, v := range cloudRegion {
+		if !isVars(k) {
+			continue
+		}
+		if value, ok := v.(string); ok {
+			vars = append(vars, "-var")
+			vars = append(vars, k+"="+value)
+		}
+	}
+	output, err := t.Destroy(req.ClusterName, vars)
 	if err != nil {
 		resp.Output = output
 		detail, _ := ptypes.MarshalAny(resp)
@@ -87,4 +115,14 @@ func (k Kotf) Destroy(ctx context.Context, req *api.TerraformDestroyRequest) (*a
 	resp.Output = output
 	resp.Success = true
 	return resp, nil
+}
+
+func isVars(key string) bool {
+	keys := [3]string{"username", "user", "password"}
+	for _, v := range keys {
+		if v == key {
+			return true
+		}
+	}
+	return false
 }
