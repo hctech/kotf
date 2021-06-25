@@ -68,8 +68,10 @@ func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.R
 			continue
 		}
 		if value, ok := v.(string); ok {
-			vars = append(vars, "-var")
-			vars = append(vars, k+"="+value)
+			if value != "" {
+				vars = append(vars, "-var")
+				vars = append(vars, k+"="+value)
+			}
 		}
 	}
 	output, err := t.Apply(req.ClusterName, vars)
@@ -91,14 +93,16 @@ func (k Kotf) Destroy(ctx context.Context, req *api.TerraformDestroyRequest) (*a
 	if err := json.Unmarshal([]byte(req.CloudRegion), &cloudRegion); err != nil {
 		return resp, err
 	}
-	var vars = make([]string, 2)
+	var vars = make([]string, 0)
 	for k, v := range cloudRegion {
 		if !isVars(k) {
 			continue
 		}
 		if value, ok := v.(string); ok {
-			vars = append(vars, "-var")
-			vars = append(vars, k+"="+value)
+			if value != "" {
+				vars = append(vars, "-var")
+				vars = append(vars, k+"="+value)
+			}
 		}
 	}
 	output, err := t.Destroy(req.ClusterName, vars)
