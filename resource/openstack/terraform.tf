@@ -44,6 +44,7 @@ provider "openstack" {
           network {
             port = "${openstack_networking_port_v2.{{.shortName}}.id}"
           }
+          availability_zone = "{{.zone.cluster}}"
         }
     {{ else if eq .zone.ipType "floating" }}
           resource "openstack_networking_port_v2" "{{.shortName}}" {
@@ -59,6 +60,7 @@ provider "openstack" {
               network {
                 port = "${openstack_networking_port_v2.{{.shortName}}.id}"
               }
+              availability_zone = "{{.zone.cluster}}"
             }
 
             resource "openstack_networking_floatingip_v2" "{{.shortName}}" {
