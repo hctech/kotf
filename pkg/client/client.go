@@ -28,7 +28,7 @@ func (c *KotfClient) createConnection() (*grpc.ClientConn, error) {
 	return conn, nil
 }
 
-func (c *KotfClient) Init(clusterName string, cloudType string, provider string, cloudRegion string, hosts string) (*api.Result, error) {
+func (c *KotfClient) Init(clusterName string, cloudType string, provider string, cloudRegion string, hosts string) (*api.KotfResult, error) {
 	conn, err := c.createConnection()
 	if err != nil {
 		return nil, err
@@ -49,7 +49,7 @@ func (c *KotfClient) Init(clusterName string, cloudType string, provider string,
 	return result, nil
 }
 
-func (c *KotfClient) Apply(clusterName string, regionVars string) (*api.Result, error) {
+func (c *KotfClient) Apply(clusterName string, regionVars string) (*api.KotfResult, error) {
 	conn, err := c.createConnection()
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func (c *KotfClient) Apply(clusterName string, regionVars string) (*api.Result, 
 	return result, nil
 }
 
-func (c *KotfClient) Destroy(clusterName string, regionVars string) (*api.Result, error) {
+func (c *KotfClient) Destroy(clusterName string, regionVars string) (*api.KotfResult, error) {
 	conn, err := c.createConnection()
 	if err != nil {
 		return nil, err

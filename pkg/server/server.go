@@ -20,10 +20,10 @@ func NewKotf() *Kotf {
 	return &Kotf{}
 }
 
-func (k Kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.Result, error) {
+func (k Kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.KotfResult, error) {
 
 	t := terraform.NewTerraform()
-	resp := &api.Result{
+	resp := &api.KotfResult{
 		Success: false,
 	}
 	var provider map[string]interface{}
@@ -53,9 +53,9 @@ func (k Kotf) Init(ctx context.Context, req *api.TerraformInitRequest) (*api.Res
 	return resp, nil
 }
 
-func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.Result, error) {
+func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.KotfResult, error) {
 	t := terraform.NewTerraform()
-	resp := &api.Result{
+	resp := &api.KotfResult{
 		Success: false,
 	}
 	var cloudRegion map[string]interface{}
@@ -84,9 +84,9 @@ func (k Kotf) Apply(ctx context.Context, req *api.TerraformApplyRequest) (*api.R
 	return resp, nil
 }
 
-func (k Kotf) Destroy(ctx context.Context, req *api.TerraformDestroyRequest) (*api.Result, error) {
+func (k Kotf) Destroy(ctx context.Context, req *api.TerraformDestroyRequest) (*api.KotfResult, error) {
 	t := terraform.NewTerraform()
-	resp := &api.Result{
+	resp := &api.KotfResult{
 		Success: false,
 	}
 	var cloudRegion map[string]interface{}
