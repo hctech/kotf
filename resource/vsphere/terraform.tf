@@ -22,8 +22,8 @@ provider "vsphere" {
 data "vsphere_datacenter" "dc" {
   name = "{{ $region.datacenter }}"
 }
-
 {{ range $region.zones}}
+
 data "vsphere_resource_pool" "{{ .key }}" {
   {{ if  eq .resourcePool "Resources" }}
    name  = "{{ .cluster }}/Resources"
@@ -32,6 +32,17 @@ data "vsphere_resource_pool" "{{ .key }}" {
   {{ end }}
    datacenter_id = data.vsphere_datacenter.dc.id
 }
+
+{{ if .resourceType }}
+    {{ if and eq .resourceType "host" }}
+        data "vsphere_host" "{{ .key }}" {
+          name          = "{{ .hostSystem }}"
+          datacenter_id = data.vsphere_datacenter.dc.id
+        }
+    {{ end }}
+{{ end }}
+
+
 
 data "vsphere_network" "{{ .key }}" {
   name = "{{ .network }}"
@@ -61,6 +72,12 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
   name = "{{ .name }}"
   folder = "kubeoperator"
   resource_pool_id = data.vsphere_resource_pool.{{ .zone.key }}.id
+
+{{ if .resourceType }}
+  {{ if eq .resourceType "host" }}
+    host_system_id = data.vsphere_host.{{ .zone.key }}.id
+  {{ end }}
+{{ end }}
 
   {{ if not .datastore }}
      datastore_id = data.vsphere_datastore.{{ index .zone.datastore 0 }}.id
