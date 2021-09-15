@@ -34,7 +34,7 @@ data "vsphere_resource_pool" "{{ .key }}" {
 }
 
 {{ if .resourceType }}
-    {{ if and eq .resourceType "host" }}
+    {{ if  eq .resourceType "host" }}
         data "vsphere_host" "{{ .key }}" {
           name          = "{{ .hostSystem }}"
           datacenter_id = data.vsphere_datacenter.dc.id
@@ -73,8 +73,8 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
   folder = "kubeoperator"
   resource_pool_id = data.vsphere_resource_pool.{{ .zone.key }}.id
 
-{{ if .resourceType }}
-  {{ if eq .resourceType "host" }}
+{{ if .zone.resourceType }}
+  {{ if eq .zone.resourceType "host" }}
     host_system_id = data.vsphere_host.{{ .zone.key }}.id
   {{ end }}
 {{ end }}
