@@ -59,6 +59,12 @@ data "vsphere_datastore" "{{ . }}" {
 
 {{ end }}
 
+{{ range $key, $val := .stores}}
+    data "vsphere_datastore" "{{ $key }}" {
+      name = "{{ $val }}"
+      datacenter_id = data.vsphere_datacenter.dc.id
+    }
+{{ end }}
 
 data "vsphere_virtual_machine" "{{ .key }}" {
   name = "{{ .imageName }}"
@@ -80,9 +86,9 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
 {{ end }}
 
   {{ if not .datastore }}
-     datastore_id = data.vsphere_datastore.{{ index .zone.datastore 0 }}.id
+     datastore_id = data.vsphere_datastore.{{ index .zone.stores 0 }}.id
   {{ else }}
-     datastore_id = data.vsphere_datastore.{{ .datastore }}.id
+     datastore_id = data.vsphere_datastore.{{ .datastoreKey }}.id
   {{ end }}
   num_cpus = {{ .cpu }}
   memory = {{ .memory }}
