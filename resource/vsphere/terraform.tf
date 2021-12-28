@@ -24,6 +24,8 @@ data "vsphere_datacenter" "dc" {
 }
 {{ range $region.zones}}
 
+{{ if .cluster }}
+
 data "vsphere_resource_pool" "{{ .key }}" {
   {{ if  eq .resourcePool "Resources" }}
    name  = "{{ .cluster }}/Resources"
@@ -33,15 +35,25 @@ data "vsphere_resource_pool" "{{ .key }}" {
    datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-{{ if .resourceType }}
-    {{ if  eq .resourceType "host" }}
-        data "vsphere_host" "{{ .key }}" {
-          name          = "{{ .hostSystem }}"
-          datacenter_id = data.vsphere_datacenter.dc.id
-        }
-    {{ end }}
 {{ end }}
 
+{{ if .resource }}
+
+data "vsphere_resource_pool" "{{ .key }}" {
+   name  = "{{ .resource }}"
+   datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+{{ end }}
+
+{{ if .resourceType }}
+    {{ if  eq .resourceType "host" }}
+data "vsphere_host" "{{ .key }}" {
+  name          = "{{ .hostSystem }}"
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+    {{ end }}
+{{ end }}
 
 
 data "vsphere_network" "{{ .key }}" {
@@ -50,21 +62,24 @@ data "vsphere_network" "{{ .key }}" {
 }
 
 
-{{ range .datastore}}
+{{ if .stores }}
+ {{ range $key, $val := .stores}}
+ data "vsphere_datastore" "{{ $val }}" {
+   name = "{{ $key }}"
+   datacenter_id = data.vsphere_datacenter.dc.id
+ }
+{{ end }}
+{{ else }}
 
+{{ range .datastore}}
 data "vsphere_datastore" "{{ . }}" {
   name = "{{ . }}"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
+{{ end }}
 
 {{ end }}
 
-{{ range $key, $val := .stores}}
-    data "vsphere_datastore" "{{ $key }}" {
-      name = "{{ $val }}"
-      datacenter_id = data.vsphere_datacenter.dc.id
-    }
-{{ end }}
 
 data "vsphere_virtual_machine" "{{ .key }}" {
   name = "{{ .imageName }}"
@@ -85,11 +100,15 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
   {{ end }}
 {{ end }}
 
-  {{ if not .datastore }}
-     datastore_id = data.vsphere_datastore.{{ index .zone.stores 0 }}.id
+  {{ if .datastoreKey}}
+    datastore_id = data.vsphere_datastore.{{ .datastoreKey }}.id
+  {{ else if .datastore }}
+    datastore_id = data.vsphere_datastore.{{ .datastore }}.id
   {{ else }}
-     datastore_id = data.vsphere_datastore.{{ .datastoreKey }}.id
+     datastore_id = data.vsphere_datastore.{{ index .zone.stores 0 }}.id
   {{ end }}
+
+
   num_cpus = {{ .cpu }}
   memory = {{ .memory }}
   guest_id = data.vsphere_virtual_machine.{{ .zone.key }}.guest_id
