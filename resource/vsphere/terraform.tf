@@ -144,9 +144,7 @@ resource "vsphere_virtual_machine" "{{.shortName}}" {
 
 
   lifecycle {
-    ignore_changes = [
-      disk,
-    ]
+    ignore_changes = all
   }
 
   clone {
