@@ -20,11 +20,6 @@ data "fusioncompute_site" "site" {
   name = "{{ $region.datacenter }}"
 }
 
-data "fusioncompute_cluster" "cluster" {
-  name = "ManagementCluster"
-  site_uri = data.fusioncompute_site.site.id
-}
-
 {{ range $region.zones}}
 data "fusioncompute_cluster" "{{ .key }}" {
   name  = "{{ .cluster }}"
@@ -53,7 +48,7 @@ data "fusioncompute_datastore" "{{ . }}" {
 
 
 data "fusioncompute_vm" "{{ .key }}" {
-  name = "{{ .template }}"
+  name = "{{ .imageName }}"
   site_uri = data.fusioncompute_site.site.id
 }
 {{ end }}
